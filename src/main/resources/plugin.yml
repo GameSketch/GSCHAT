@@ -1,0 +1,12 @@
+name: GSCHAT
+main: net.gamesketch.bukkit.bot.gschat
+version: 0.0.1
+website: http://www.gamesketch.net
+author: The GameSketch Community
+description: >
+             Replacements of the old IRC bot "GS-CHAT".
+commands:
+  who:
+    description: Returns the online players.
+    usage: |
+           Example: /who - Returns the online players.
