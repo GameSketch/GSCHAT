@@ -1,4 +1,4 @@
-package net.gamesketch.bukkit.bot;
+package main.java.net.gamesketch.bukkit.bot;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -30,7 +30,9 @@ public class GSCHAT extends JavaPlugin {
     public boolean onCommand(CommandSender sender, Command command, String commandLabel, String[] args) {
         String commandName = command.getName().toLowerCase();
 
-        if (commandName.equals("")) {
+        if (commandName.equals("who")) {
+        	sender.sendMessage("Connected players: " + sender.getServer().getOnlinePlayers().toString());
+        	return true;
         }
         return false;
     }

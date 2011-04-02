@@ -1,5 +1,5 @@
 name: GSCHAT
-main: net.gamesketch.bukkit.bot.gschat
+main: net.gamesketch.bukkit.bot.GSCHAT
 version: 0.0.1
 website: http://www.gamesketch.net
 author: The GameSketch Community
@@ -9,4 +9,5 @@ commands:
   who:
     description: Returns the online players.
     usage: |
-           Example: /who - Returns the online players.
+           /<command>
+           Example: /<command> - Returns the online players.
