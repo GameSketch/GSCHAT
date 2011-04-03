@@ -4,7 +4,11 @@
   <artifactId>gs-chat</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>GSCHAT</name>
-  <url>http://www.bukkit.org</url>
+  <url>http://plugins.gamesketch.net</url>
+  <organization>
+  	<name>GameSketch</name>
+  	<url>http://gamesketch.net</url>
+  </organization>
   <build>
       <plugins>
           <plugin>
