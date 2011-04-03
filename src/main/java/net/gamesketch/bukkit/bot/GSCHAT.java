@@ -1,4 +1,4 @@
-package main.java.net.gamesketch.bukkit.bot;
+package net.gamesketch.bukkit.bot;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
