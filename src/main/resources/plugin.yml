@@ -23,3 +23,9 @@ commands:
     usage: |
            /<command>
            Example: /<command> - Returns the distance to the spawn
+  
+  blockhead:
+    description: Sets the block on your head slot
+    usage: |
+           /<command> itemID
+           Example: /<command> 53 - Places an wooden stair on your head
