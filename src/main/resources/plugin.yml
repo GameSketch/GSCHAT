@@ -11,3 +11,15 @@ commands:
     usage: |
            /<command>
            Example: /<command> - Returns the online players.
+  
+  /spawn:
+    description: Teleports you to the world spawn
+    usage: |
+           /<command>
+           Example: /<command> - Returns you to the world spawn.
+  
+  /dist:
+    description: Calculates the distance from your x/y/z to spawn's x/y/z
+    usage: |
+           /<command>
+           Example: /<command> - Returns the distance to the spawn

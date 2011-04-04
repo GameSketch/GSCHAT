@@ -1,10 +1,12 @@
 package net.gamesketch.bukkit.bot;
 
+import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.util.Vector;
 
 
 /**
@@ -49,6 +51,34 @@ public class GSCHAT extends JavaPlugin {
         	sender.sendMessage("Connected players (" + serverliststring + "): " + list);
         	return true;
         }
+        if (commandName.equals("/spawn")) {
+        	Player player = (Player)sender;
+        	player.teleportTo(player.getWorld().getSpawnLocation());
+        	player.sendMessage("Welcome to the spawn!");
+        	return true;
+        }
+        if (commandName.equals("/dist")) {
+        	Player player = (Player)sender;
+        	Location spawnloc = player.getWorld().getSpawnLocation();
+        	Location playerloc = player.getLocation();
+        	
+        	Vector spawnvect = new Vector();
+        	spawnvect.setX(spawnloc.getX());
+        	spawnvect.setY(spawnloc.getY());
+        	spawnvect.setZ(spawnloc.getZ());
+        	
+        	Vector playervect = new Vector();
+        	playervect.setX(playerloc.getX());
+        	playervect.setY(playerloc.getY());
+        	playervect.setZ(playerloc.getZ());
+        	
+        	String distance = Integer.toString((int)playervect.distance(spawnvect));
+            
+        	player.sendMessage("The distance from you to the spawn is " + distance + " blocks.");
+        	return true;
+        }
+        
+        
         return false;
     }
 
