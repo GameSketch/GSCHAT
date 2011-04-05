@@ -14,6 +14,13 @@ import org.bukkit.util.Vector;
 * Replacements of old GS-CHAT commands.
 *
 * @author Streammz
+* 
+* 
+* TODO:
+* 2x longer day time
+* underwater breathing with helmet
+* compass to north
+* 
 */
 public class GSCHAT extends JavaPlugin {
 
@@ -57,6 +64,16 @@ public class GSCHAT extends JavaPlugin {
         	player.teleportTo(player.getWorld().getSpawnLocation());
         	player.sendMessage("Welcome to the spawn!");
         	return true;
+        }
+        if (commandName.equals("setspawn")) {
+        	Player player = (Player)sender;
+        	Location playerloc = player.getLocation();
+        	if (!player.isOp()) {
+        		player.sendMessage("You can't set the spawn!");
+        		return false;
+        	}
+        	player.getWorld().setSpawnLocation((int)playerloc.getX(), (int)playerloc.getY(), (int)playerloc.getZ());
+            return true;
         }
         if (commandName.equals("/dist")) {
         	Player player = (Player)sender;

@@ -17,6 +17,11 @@ commands:
     usage: |
            /<command>
            Example: /<command> - Returns you to the world spawn.
+  setspawn:
+    description: Sets the spawn location
+    usage: |
+           /<command>
+           Example: /<command> - Sets the spawn at your location.
   
   /dist:
     description: Calculates the distance from your x/y/z to spawn's x/y/z
