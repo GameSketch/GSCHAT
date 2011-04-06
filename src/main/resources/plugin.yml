@@ -17,6 +17,13 @@ commands:
     usage: |
            /<command>
            Example: /<command> - Returns you to the world spawn.
+           
+  spawn:
+    description: Teleports you to the world spawn
+    usage: |
+           /<command>
+           Example: /<command> - Returns you to the world spawn.
+  
   setspawn:
     description: Sets the spawn location
     usage: |
@@ -34,3 +41,10 @@ commands:
     usage: |
            /<command> itemID
            Example: /<command> 53 - Places an wooden stair on your head
+           Example: /<command> 20 bukkit - Places an glass block on a player named "bukkit" his head.
+  
+  freezetime:
+    description: Let opped players freeze the time
+    usage: |
+           /<command>
+           Example: /<command> - Freezes the time on day
