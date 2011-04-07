@@ -16,6 +16,15 @@ public class GSCHAT extends JavaPlugin
 {
   private final PlayerListener playerListener = new playerListener();
   public static boolean isTimeFrozen;
+  public static boolean enableWho = true;
+  public static boolean enableSpawn = true;
+  public static boolean enableSetspawn = true;
+  public static boolean enabledist = true;
+  public static boolean enableangle = true;
+  public static boolean enableblockhead = true;
+  public static boolean enablefreezetime = true;
+  public static boolean enablewaterhelmet = true;
+  public static boolean enableinfpickup = true;
 
   public void onDisable()
   {
@@ -29,6 +38,7 @@ public class GSCHAT extends JavaPlugin
     pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener, Event.Priority.Normal, this);
     isTimeFrozen = false;
+    //Settings.Load();
 
     System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
   }
