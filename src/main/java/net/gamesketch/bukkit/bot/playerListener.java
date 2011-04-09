@@ -1,5 +1,10 @@
 package net.gamesketch.bukkit.bot;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
+import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -59,4 +64,21 @@ public class playerListener extends PlayerListener {
 		}
 		
 	}
+	
+	/*
+	 * GS Motd
+	 */
+    public void onPlayerJoin(PlayerEvent event) {
+        final Player player = event.getPlayer();
+        final Timer timer = new Timer();
+        timer.schedule(
+        	new TimerTask() {
+        		public void run() {
+        			player.performCommand("motd");
+        			timer.cancel();
+        		}
+        	}
+        , 2500);
+
+    }
 }

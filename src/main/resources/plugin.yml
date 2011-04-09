@@ -55,3 +55,15 @@ commands:
            /<command> pagename
            Example: /<command> - Shows the list with pages
            Example: /<command> building - Shows the rules about building
+           
+  setmotd:
+    description: Set the message of the day.
+    usage: |
+           /<command> message
+           Example: /<command> "Welcome to the GameSketch Network" - set the motd.
+           
+  motd:
+    description: Read the message of the day.
+    usage: |
+           /<command>
+           Example: /<command> - read the motd

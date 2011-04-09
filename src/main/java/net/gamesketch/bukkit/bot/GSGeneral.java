@@ -1,5 +1,15 @@
 package net.gamesketch.bukkit.bot;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
@@ -15,6 +25,7 @@ import org.bukkit.util.Vector;
 public class GSGeneral extends JavaPlugin
 {
   private final PlayerListener playerListener = new playerListener();
+  private List<String> message;
   public static boolean isTimeFrozen;
   public static boolean enableWho = true;
   public static boolean enableSpawn = true;
@@ -33,11 +44,30 @@ public class GSGeneral extends JavaPlugin
 
   public void onEnable()
   {
+	  
+	
+	 //MOTD
+      message = new LinkedList<String>();
+      try {
+          File dataFile = getDataFile("motd.txt", false);
+          if (!dataFile.exists()) {
+              message.add("The MOTD needs to be set!");
+              writeOutMOTD(dataFile);
+          } else {
+              readInMOTD(dataFile);
+          }
+      } catch (IOException e) {
+          message.add("ERROR: Something is wrong with the MOTD file!");
+      }
+	  
+	  
+	  //Regular stuff
     PluginManager pm = getServer().getPluginManager();
     PluginDescriptionFile pdfFile = getDescription();
     pm.registerEvent(Event.Type.PLAYER_MOVE, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener, Event.Priority.Normal, this);
+    pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener, Event.Priority.Normal, this);
     isTimeFrozen = false;
     Settings.Load();
     if (!Rules.checkFile()) { System.out.println("Unable to load rules file."); }
@@ -146,7 +176,110 @@ public class GSGeneral extends JavaPlugin
     	if (!Rules.send((Player)sender, args)) { return false; }
     	return true;
     }
+    
+    if (commandName.equals("setmotd")) {
+        if (args.length == 0) {
+            sender.sendMessage("Please enter a message.");
+            return true;
+        }
+        // build the message from the arguments, one by one
+        StringBuilder builder = new StringBuilder();
+        for (String s : args) {
+            builder.append(s);
+            builder.append(" ");
+        }
+        // return the built message, minus the last space that was appended
+        if (builder.length() > 0) {
+            // reset message and set it to the new message
+            message = new LinkedList<String>();
+            message.add(builder.substring(0, builder.length() - 1));
+            try {
+                writeOutMOTD(getDataFile("motd.txt", false));
+            } catch (IOException e) {
+                System.out.println("Could not write MOTD.");
+            }
+        }
+        return true;
+    }
+    if (commandName.equals("motd")) {
+        Player player = (Player)sender;
+        for (String str : getMessage()) {
+        	str = str.
+        	replaceAll("@red@", ChatColor.RED + "").
+        	replaceAll("@yellow@", ChatColor.YELLOW + "").
+        	replaceAll("@gold@", ChatColor.GOLD + "").
+        	replaceAll("@green@", ChatColor.GREEN + "").
+        	replaceAll("@darkgreen@", ChatColor.DARK_GREEN + "").
+        	replaceAll("@blue@", ChatColor.BLUE + "").
+        	replaceAll("@darkblue@", ChatColor.DARK_BLUE + "").
+        	replaceAll("@@", ChatColor.WHITE + "").
+        	replaceAll("@gray@", ChatColor.GRAY + "").
+        	replaceAll("@darkgray@", ChatColor.DARK_GRAY + "").
+        	replaceAll("@aqua@", ChatColor.AQUA + "").
+        	replaceAll("@darkaqua@", ChatColor.DARK_AQUA + "").
+        	replaceAll("@black@", ChatColor.BLACK + "").
+        	replaceAll("@darkpurple@", ChatColor.DARK_PURPLE + "").
+        	replaceAll("@darkred@", ChatColor.DARK_RED + "").
+        	replaceAll("@pink@", ChatColor.LIGHT_PURPLE + "");
+
+            player.sendMessage(ChatColor.RED + "[MOTD]" + ChatColor.WHITE + " " + str);
+        }
+        return true;
+    }
+    
+    
 
     return false;
+  }
+  
+  /*
+   * MOTD
+   */
+  public List<String> getMessage() {
+      return message;
+  }
+  
+  private void readInMOTD(File dataFile) throws FileNotFoundException, IOException {
+      BufferedReader in = new BufferedReader(new FileReader(dataFile));
+      String str;
+      while ((str = in.readLine()) != null) {
+      	if (!str.startsWith("#")) {
+              message.add(str);
+      	}
+      }
+      in.close();
+  }
+  
+  private void writeOutMOTD(File dataFile) throws IOException {
+      BufferedWriter out = new BufferedWriter(new FileWriter(dataFile));
+      for (String str : message) {
+          out.write(str);
+      }
+      out.close();
+  }
+  
+  private boolean createDataDirectory() {
+      File file = new File("plugins/GSGeneral/");
+      if (!file.isDirectory()){
+          if (!file.mkdirs()) {
+              // failed to create the non existent directory, so failed
+              return false;
+          }
+      }
+      return true;
+  }
+  
+  private File getDataFile(String filename, boolean mustAlreadyExist) {
+      if (createDataDirectory()) {
+          File file = new File("plugins/GSGeneral/" + filename);
+          if (mustAlreadyExist) {
+              if (file.exists()) {
+                  return file;
+              }
+          } else {
+              return file;
+          }
+      }
+      return null;
   }
 }
