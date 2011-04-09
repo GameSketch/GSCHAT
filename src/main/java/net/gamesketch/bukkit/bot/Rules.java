@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 public class Rules {
 	
 	public static boolean checkFile() {
+		if (!GSGeneral.enableRules) { return true; }
 		File file = new File("plugins/GSGeneral/rules.txt");
 		File folder = new File("plugins/GSGeneral/");
 		if (!file.exists()) { System.out.println("[GSGeneral] No rules file found, generating file.");
@@ -27,6 +28,7 @@ public class Rules {
 	}
 	
 	public static boolean send(Player player, String[] args) {
+		if (!GSGeneral.enableRules) { return true; }
 		File file = new File("plugins/GSGeneral/rules.txt");
 		
 		//check the file

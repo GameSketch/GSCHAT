@@ -13,20 +13,24 @@ public class playerListener extends PlayerListener {
 		 * Time freezer.
 		 */
 		if (GSGeneral.isTimeFrozen) {
-			if (event.getPlayer().getWorld().getTime() >= 4000 || event.getPlayer().getWorld().getTime() < 3000)  {
-				event.getPlayer().getWorld().setTime(3000);
+			if (GSGeneral.enablefreezetime) { 
+				if (event.getPlayer().getWorld().getTime() >= 4000 || event.getPlayer().getWorld().getTime() < 3000)  {
+					event.getPlayer().getWorld().setTime(3000);
+				}
 			}
 		}
 		/*
 		 * Underwater breathing.
 		 */
-		int air = event.getPlayer().getRemainingAir();
-		int maxair = event.getPlayer().getMaximumAir();
-		if (air < maxair) {
-			ItemStack helmet = event.getPlayer().getInventory().getHelmet();
-			ItemStack glass = new ItemStack(20);
-			if (helmet.getType().equals(glass.getType())) {
-				event.getPlayer().setRemainingAir(maxair);
+		if (GSGeneral.enablewaterhelmet) { 
+			int air = event.getPlayer().getRemainingAir();
+			int maxair = event.getPlayer().getMaximumAir();
+			if (air < maxair) {
+				ItemStack helmet = event.getPlayer().getInventory().getHelmet();
+				ItemStack glass = new ItemStack(20);
+				if (helmet.getType().equals(glass.getType())) {
+					event.getPlayer().setRemainingAir(maxair);
+				}
 			}
 		}
 	}
