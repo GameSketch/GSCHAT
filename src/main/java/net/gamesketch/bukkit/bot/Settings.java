@@ -10,11 +10,14 @@ import java.io.IOException;
 public class Settings {
 
 	public static void Load() {
-		File file = new File("plugins/GSCHAT/GS-CHAT.settings");
+		File file = new File("plugins/GSGeneral/GS-CHAT.settings");
 		if (!file.exists()) {
-			System.out.println("[GSCHAT] Couldn't find data file, creating with default settings.");
+			System.out.println("[GSGeneral] Couldn't find settings file, creating defauls...");
+			BufferedWriter out;
+			new File("plugins/GSGeneral/").mkdirs();
 			try {
-				BufferedWriter out = new BufferedWriter(new FileWriter(file));
+				out = new BufferedWriter(new FileWriter(file));
+				
 				out.write("#Settings file for GS-CHAT");
 				out.write("#");
 				out.write("#Enable the /who command");
@@ -40,8 +43,9 @@ public class Settings {
 				out.write("#");
 				out.write("#Disallow non-ops to pickup infinite blocks");
 				out.write("enable-infpickup=true");
-			} catch (IOException e) { System.out.println("[GSCHAT] Error: Couldn't make a new settings file"); System.out.println(e); return; }
-			System.out.println("[GSCHAT] Settings file made, You'd better edit it to your preferences.");
+			} catch (IOException e) { System.out.println("[GSGeneral] Error: Couldn't make a new settings file."); System.out.println(e); return; }
+			try { out.close(); } catch (IOException e) { System.out.println("[GSGeneral] Error: Couldn't save the settings file."); System.out.println(e); return; }
+			System.out.println("[GSGeneral] Settings file made, You'd better edit it.");
 		}
 		
 	try {
@@ -49,19 +53,19 @@ public class Settings {
 		String str;
 		while ((str = in.readLine()) != null) {
 			if (!str.startsWith("#")) {
-				if (str.startsWith("enable-who")) { GSCHAT.enableWho = str.endsWith("true"); }
-				if (str.startsWith("enable-spawn")) { GSCHAT.enableSpawn = str.endsWith("true"); }
-				if (str.startsWith("enable-setspawn")) { GSCHAT.enableSetspawn = str.endsWith("true"); }
-				if (str.startsWith("enable-dist")) { GSCHAT.enabledist = str.endsWith("true"); }
-				if (str.startsWith("enable-blockhead")) { GSCHAT.enableblockhead = str.endsWith("true"); }
-				if (str.startsWith("enable-freezetime")) { GSCHAT.enablefreezetime = str.endsWith("true"); }
-				if (str.startsWith("enable-waterhelmet")) { GSCHAT.enablewaterhelmet = str.endsWith("true"); }
-				if (str.startsWith("enable-infpickup")) { GSCHAT.enableinfpickup = str.endsWith("true"); }
+				if (str.startsWith("enable-who")) { GSGeneral.enableWho = str.endsWith("true"); }
+				if (str.startsWith("enable-spawn")) { GSGeneral.enableSpawn = str.endsWith("true"); }
+				if (str.startsWith("enable-setspawn")) { GSGeneral.enableSetspawn = str.endsWith("true"); }
+				if (str.startsWith("enable-dist")) { GSGeneral.enabledist = str.endsWith("true"); }
+				if (str.startsWith("enable-blockhead")) { GSGeneral.enableblockhead = str.endsWith("true"); }
+				if (str.startsWith("enable-freezetime")) { GSGeneral.enablefreezetime = str.endsWith("true"); }
+				if (str.startsWith("enable-waterhelmet")) { GSGeneral.enablewaterhelmet = str.endsWith("true"); }
+				if (str.startsWith("enable-infpickup")) { GSGeneral.enableinfpickup = str.endsWith("true"); }
 			}
 			
 		}
-	} catch (IOException e) { System.out.println("[GSCHAT] Error: Couldn't read the settings file."); return; }
-	System.out.println("[GSCHAT] Data successfully loaded.");
+	} catch (IOException e) { System.out.println("[GSGeneral] Error: Couldn't read the settings file."); return; }
+	System.out.println("[GSGeneral] Data successfully loaded.");
 	}
 	
 }

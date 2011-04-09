@@ -12,7 +12,7 @@ import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.util.Vector;
 
-public class GSCHAT extends JavaPlugin
+public class GSGeneral extends JavaPlugin
 {
   private final PlayerListener playerListener = new playerListener();
   public static boolean isTimeFrozen;
@@ -39,6 +39,7 @@ public class GSCHAT extends JavaPlugin
     pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener, Event.Priority.Normal, this);
     isTimeFrozen = false;
     //Settings.Load();
+    if (!Rules.checkFile()) { System.out.println("Unable to load rules file."); }
 
     System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
   }
@@ -127,6 +128,11 @@ public class GSCHAT extends JavaPlugin
       isTimeFrozen = !isTimeFrozen;
       player.sendMessage(ChatColor.AQUA + "The time is frozen until you reset now.");
       return true;
+    }
+    
+    if (commandName.equals("rules")) {
+    	if (!Rules.send((Player)sender, args)) { return false; }
+    	return true;
     }
 
     return false;

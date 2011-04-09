@@ -1,5 +1,5 @@
-name: GSCHAT
-main: net.gamesketch.bukkit.bot.GSCHAT
+name: GSGeneral
+main: net.gamesketch.bukkit.bot.GSGeneral
 version: 0.0.1
 website: http://www.gamesketch.net
 author: The GameSketch Community
@@ -48,3 +48,10 @@ commands:
     usage: |
            /<command>
            Example: /<command> - Freezes the time on day
+           
+  rules:
+    description: A page with rules
+    usage: |
+           /<command> pagename
+           Example: /<command> - Shows the list with pages
+           Example: /<command> building - Shows the rules about building

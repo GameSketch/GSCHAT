@@ -12,7 +12,7 @@ public class playerListener extends PlayerListener {
 		/*
 		 * Time freezer.
 		 */
-		if (GSCHAT.isTimeFrozen) {
+		if (GSGeneral.isTimeFrozen) {
 			if (event.getPlayer().getWorld().getTime() >= 4000 || event.getPlayer().getWorld().getTime() < 3000)  {
 				event.getPlayer().getWorld().setTime(3000);
 			}
@@ -49,8 +49,8 @@ public class playerListener extends PlayerListener {
 	 */
 	public void onPlayerQuit(PlayerQuitEvent event) {
 		if (event.getPlayer().getServer().getOnlinePlayers().length < 1) {
-			if (GSCHAT.isTimeFrozen) {
-				GSCHAT.isTimeFrozen = !GSCHAT.isTimeFrozen;
+			if (GSGeneral.isTimeFrozen) {
+				GSGeneral.isTimeFrozen = !GSGeneral.isTimeFrozen;
 			}
 		}
 		
