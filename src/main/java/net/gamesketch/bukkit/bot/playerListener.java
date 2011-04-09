@@ -4,7 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -68,7 +68,7 @@ public class playerListener extends PlayerListener {
 	/*
 	 * GS Motd
 	 */
-    public void onPlayerJoin(PlayerEvent event) {
+    public void onPlayerJoin(PlayerJoinEvent event) {
         final Player player = event.getPlayer();
         final Timer timer = new Timer();
         timer.schedule(
