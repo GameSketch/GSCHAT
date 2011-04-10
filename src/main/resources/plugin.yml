@@ -67,3 +67,9 @@ commands:
     usage: |
            /<command>
            Example: /<command> - read the motd
+  
+  report:
+    description: Report something to moderators.
+    usage: |
+           /<command> message
+           Example: /<command> I've been greifed just now. - Report that message to every online mod

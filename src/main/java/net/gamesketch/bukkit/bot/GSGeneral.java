@@ -37,6 +37,7 @@ public class GSGeneral extends JavaPlugin
   public static boolean enablewaterhelmet = true;
   public static boolean enableinfpickup = true;
   public static boolean enableRules = true;
+  public static boolean enableReport = true;
 
   public void onDisable()
   {
@@ -176,6 +177,26 @@ public class GSGeneral extends JavaPlugin
     	if (!Rules.send((Player)sender, args)) { return false; }
     	return true;
     }
+    if (commandName.equals("report")) {
+    	Player player = (Player)sender;
+    	if (!GSGeneral.enableReport) { return true; }
+    	if (args.length < 1) { player.sendMessage(ChatColor.RED + "You can't report nothing!"); return false; }
+    	else {
+    		StringBuilder msg = new StringBuilder();
+    		for (String arg : args) {
+    			msg.append(arg);
+    			msg.append(" ");
+    		}
+    		
+    		Player[] online = player.getServer().getOnlinePlayers();
+    		for (Player p : online) {
+    			if (p.isOp()) {
+    				p.sendMessage("[" + ChatColor.DARK_GREEN + "REPORT: " + player.getName() + ChatColor.WHITE + "] " + ChatColor.GOLD + msg);
+    			}
+    		}
+    	}
+    	return true;
+    }
     
     if (commandName.equals("setmotd")) {
         if (args.length == 0) {
@@ -234,6 +255,8 @@ public class GSGeneral extends JavaPlugin
   
   /*
    * MOTD
+   * STUFF
+   * HERE
    */
   public List<String> getMessage() {
       return message;
