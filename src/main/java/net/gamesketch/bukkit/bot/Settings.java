@@ -18,64 +18,43 @@ public class Settings {
 			try {
 				out = new BufferedWriter(new FileWriter(file));
 				
-				out.write("#Settings file for GSGeneral");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.flush();
-				out.write("#Enable the /who command");
-				out.newLine();
-				out.write("enable-who=true");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.flush();
-				out.write("#Enable the /spawn command");
-				out.newLine();
-				out.write("enable-spawn=true");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.flush();
-				out.write("#Enable the /setspawn command");
-				out.newLine();
-				out.write("enable-setspawn=true");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.write("#Enable the //dist command");
-				out.newLine();
-				out.write("enable-dist=true");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.flush();
-				out.write("#Enable the /blockhead command");
-				out.newLine();
-				out.write("enable-blockhead=true");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.flush();
-				out.write("#Enable the /freezetime command");
-				out.newLine();
-				out.write("enable-freezetime=true");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.flush();
-				out.write("#Enable the underwater helmet");
-				out.newLine();
-				out.write("enable-waterhelmet=true");
-				out.newLine();
-				out.write("#");
-				out.newLine();
-				out.flush();
-				out.write("#Disallow non-ops to pickup infinite blocks");
-				out.newLine();
-				out.write("enable-infpickup=true");
-				out.newLine();
-				out.flush();
+				write(out, "#Settings file for GSGeneral");
+				write(out, "#");
+				write(out, "#Enable the /who command");
+				write(out, "enable-who=true");
+				write(out, "#");
+				write(out, "#Enable the /spawn command");
+				write(out, "enable-spawn=true");
+				write(out, "#");
+				write(out, "#Enable the /setspawn command");
+				write(out, "enable-setspawn=true");
+				write(out, "#");
+				write(out, "#Enable the //dist command");
+				write(out, "enable-dist=true");
+				write(out, "#");
+				write(out, "#Enable the /blockhead command");
+				write(out, "enable-blockhead=true");
+				write(out, "#");
+				write(out, "#Enable the /freezetime command");
+				write(out, "enable-freezetime=true");
+				write(out, "#");
+				write(out, "#Enable the underwater helmet");
+				write(out, "enable-waterhelmet=true");
+				write(out, "#");
+				write(out, "#Disallow non-ops to pickup infinite blocks");
+				write(out, "enable-infpickup=true");
+				write(out, "#");
+				write(out, "#Enable the /gs support");
+				write(out, "enable-support=true");
+				write(out, "#");
+				write(out, "#Enable the /rules");
+				write(out, "enable-rules=true");
+				write(out, "#");
+				write(out, "#Enable the /a admin chat");
+				write(out, "enable-adminchat=true");
+				write(out, "#");
+				write(out, "#Minutes between each anouncement (-1 = never)");
+				write(out, "anounce-timer=15");
 			} catch (IOException e) { System.out.println("[GSGeneral] Error: Couldn't make a new settings file."); System.out.println(e); return; }
 			try { out.close(); } catch (IOException e) { System.out.println("[GSGeneral] Error: Couldn't save the settings file."); System.out.println(e); return; }
 			System.out.println("[GSGeneral] Settings file made, You'd better edit it.");
@@ -86,6 +65,7 @@ public class Settings {
 		String str;
 		while ((str = in.readLine()) != null) {
 			if (!str.startsWith("#")) {
+				str = str.toLowerCase();
 				if (str.startsWith("enable-who")) { GSGeneral.enableWho = !str.endsWith("false"); }
 				if (str.startsWith("enable-spawn")) { GSGeneral.enableSpawn = !str.endsWith("false"); }
 				if (str.startsWith("enable-setspawn")) { GSGeneral.enableSetspawn = !str.endsWith("false"); }
@@ -94,6 +74,11 @@ public class Settings {
 				if (str.startsWith("enable-freezetime")) { GSGeneral.enablefreezetime = !str.endsWith("false"); }
 				if (str.startsWith("enable-waterhelmet")) { GSGeneral.enablewaterhelmet = !str.endsWith("false"); }
 				if (str.startsWith("enable-infpickup")) { GSGeneral.enableinfpickup = !str.endsWith("false"); }
+			    if (str.startsWith("enable-support")) { GSGeneral.enableReport = !str.endsWith("false"); }
+			    if (str.startsWith("enable-rules")) { GSGeneral.enableRules = !str.endsWith("false"); }
+			    if (str.startsWith("enable-adminchat")) { GSGeneral.enableAdminchat = !str.endsWith("false"); }
+			    if (str.startsWith("anounce-timer")) { GSGeneral.anouncetimer = (Integer.parseInt(str.replace((CharSequence)"anounce-timer=",(CharSequence)""))) * 60000; 
+			    if (GSGeneral.anouncetimer < 60) { GSGeneral.enableanouncer = false; } }
 			}
 			
 		}
@@ -101,4 +86,12 @@ public class Settings {
 	System.out.println("[GSGeneral] Data successfully loaded.");
 	}
 	
+	private static void write(BufferedWriter out, String str) throws IOException {
+		out.write(str);
+		out.newLine();
+		out.flush();
+	}
+	
 }
+
+

@@ -3,7 +3,9 @@ package net.gamesketch.bukkit.bot;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerMoveEvent;
@@ -80,5 +82,23 @@ public class playerListener extends PlayerListener {
         	}
         , 2500);
 
+    }
+    
+    /*
+     * Admin Chat
+     */
+    public void onPlayerChat(PlayerChatEvent event) {
+    	Player player = event.getPlayer();
+    	Player[] online = event.getPlayer().getServer().getOnlinePlayers();
+    	if (GSGeneral.adminchat.contains(player)) {
+    		event.setCancelled(true);
+    		
+    		for (Player p : online) {
+    			if (p.isOp()) {
+    				p.sendMessage("[" + ChatColor.GREEN + "/a" + ChatColor.WHITE + "] " + player.getName() + ": " + event.getMessage());
+    			}
+    		}
+    		
+    	}
     }
 }

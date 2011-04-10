@@ -68,8 +68,14 @@ commands:
            /<command>
            Example: /<command> - read the motd
   
-  report:
+  gs:
     description: Report something to moderators.
     usage: |
            /<command> message
-           Example: /<command> I've been greifed just now. - Report that message to every online mod
+           Example: /<command> I've been greifed just now. - Report that message to every online mod.
+  
+  a:
+    description: Enables admin chat
+    usage: |
+           /<command>
+           Example: /<command> - Enables admin chat

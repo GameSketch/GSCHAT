@@ -26,6 +26,7 @@ public class GSGeneral extends JavaPlugin
 {
   private final PlayerListener playerListener = new playerListener();
   private List<String> message;
+  public static List<Player> adminchat;
   public static boolean isTimeFrozen;
   public static boolean enableWho = true;
   public static boolean enableSpawn = true;
@@ -38,6 +39,9 @@ public class GSGeneral extends JavaPlugin
   public static boolean enableinfpickup = true;
   public static boolean enableRules = true;
   public static boolean enableReport = true;
+  public static boolean enableAdminchat = true;
+  public static boolean enableanouncer = true;
+  public static long anouncetimer = 900000;
 
   public void onDisable()
   {
@@ -63,15 +67,19 @@ public class GSGeneral extends JavaPlugin
 	  
 	  
 	  //Regular stuff
+      
+    adminchat = new LinkedList<Player>();
     PluginManager pm = getServer().getPluginManager();
     PluginDescriptionFile pdfFile = getDescription();
     pm.registerEvent(Event.Type.PLAYER_MOVE, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_PICKUP_ITEM, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener, Event.Priority.Normal, this);
+    pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Highest, this); 
     isTimeFrozen = false;
     Settings.Load();
     if (!Rules.checkFile()) { System.out.println("Unable to load rules file."); }
+    Anouncer.Load(getServer());
 
     System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
   }
@@ -101,7 +109,10 @@ public class GSGeneral extends JavaPlugin
     if ((commandName.equals("/spawn")) || (commandName.equals("spawn"))) {
     	if (!GSGeneral.enableSpawn) { return true; }
       Player player = (Player)sender;
-      player.teleport(player.getWorld().getSpawnLocation());
+      Location spawn = player.getWorld().getSpawnLocation();
+      spawn.setX(spawn.getX() - 0.5);
+      spawn.setZ(spawn.getZ() - 0.5);
+      player.teleport(spawn);
       player.sendMessage("Welcome to the spawn!");
       return true;
     }
@@ -177,10 +188,10 @@ public class GSGeneral extends JavaPlugin
     	if (!Rules.send((Player)sender, args)) { return false; }
     	return true;
     }
-    if (commandName.equals("report")) {
+    if (commandName.equals("gs")) {
     	Player player = (Player)sender;
     	if (!GSGeneral.enableReport) { return true; }
-    	if (args.length < 1) { player.sendMessage(ChatColor.RED + "You can't report nothing!"); return false; }
+    	if (args.length < 1) { player.sendMessage(ChatColor.RED + "You can't support nothing!"); return false; }
     	else {
     		StringBuilder msg = new StringBuilder();
     		for (String arg : args) {
@@ -191,12 +202,46 @@ public class GSGeneral extends JavaPlugin
     		Player[] online = player.getServer().getOnlinePlayers();
     		for (Player p : online) {
     			if (p.isOp()) {
-    				p.sendMessage("[" + ChatColor.DARK_GREEN + "REPORT: " + player.getName() + ChatColor.WHITE + "] " + ChatColor.GOLD + msg);
+    				p.sendMessage("[" + ChatColor.DARK_GREEN + "SUPPORT: " + player.getName() + ChatColor.WHITE + "] " + ChatColor.GOLD + msg);
     			}
     		}
     	}
     	return true;
     }
+    
+    if (commandName.equals("a")) {
+    	Player player = (Player)sender;
+    	if (!GSGeneral.enableAdminchat) { return true; }
+    	if (!player.isOp()) { player.sendMessage(ChatColor.RED + "You are no moderator."); return true; }
+        if (args.length < 1) { 
+        	if (adminchat.contains(player)) {
+        		adminchat.remove(player);
+        		player.sendMessage(ChatColor.GREEN + "You " + ChatColor.RED + "aren't" + ChatColor.GREEN + " talking in the /a chat anymore");
+        	}
+        	else {
+        		adminchat.add(player);
+        		player.sendMessage(ChatColor.GREEN + "You are now talking in the /a chat."); 
+        	}
+        	return true; 
+        }
+        else {
+        	Player[] online = player.getServer().getOnlinePlayers();
+        	StringBuilder themessage = new StringBuilder();
+        	for (String s : args) {
+        		themessage.append(s);
+        		themessage.append(" ");
+        	}
+        	for (Player p : online) {
+    			if (p.isOp()) {
+    				p.sendMessage("[" + ChatColor.GREEN + "/a" + ChatColor.WHITE + "] " + player.getName() + ": " + themessage);
+    			}
+    		}
+        	return true;
+        	
+        }
+    }
+    
+
     
     if (commandName.equals("setmotd")) {
         if (args.length == 0) {
@@ -260,6 +305,10 @@ public class GSGeneral extends JavaPlugin
    */
   public List<String> getMessage() {
       return message;
+  }
+  
+  public static List<Player> getAdminChat() {
+	  return adminchat;
   }
   
   private void readInMOTD(File dataFile) throws FileNotFoundException, IOException {
