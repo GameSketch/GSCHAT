@@ -78,7 +78,8 @@ public class Settings {
 			    if (str.startsWith("enable-rules")) { GSGeneral.enableRules = !str.endsWith("false"); }
 			    if (str.startsWith("enable-adminchat")) { GSGeneral.enableAdminchat = !str.endsWith("false"); }
 			    if (str.startsWith("anounce-timer")) { GSGeneral.anouncetimer = (Integer.parseInt(str.replace((CharSequence)"anounce-timer=",(CharSequence)""))) * 60000; 
-			    if (GSGeneral.anouncetimer < 60) { GSGeneral.enableanouncer = false; } }
+			    if (str.startsWith("enable-lightning")) { GSGeneral.enableLightning = !str.endsWith("false"); }
+			    if (GSGeneral.anouncetimer < 60000) { GSGeneral.enableanouncer = false; } }
 			}
 			
 		}

@@ -28,7 +28,8 @@
       <artifactId>bukkit</artifactId>
       <version>0.0.1-SNAPSHOT</version>
       <type>jar</type>
-      <scope>compile</scope>
+      <scope>system</scope>
+      <systemPath>C:\Users\Gebruiker\Bukkits\target\bukkit-0.0.1-SNAPSHOT.jar</systemPath>
     </dependency>
   </dependencies>
 </project>

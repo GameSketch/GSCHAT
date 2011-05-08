@@ -1,6 +1,7 @@
 package net.gamesketch.bukkit.bot;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,8 +32,10 @@ public class BlockHead {
     catch (NumberFormatException e) { return false; }
     if (itemid >= 255) { return false; }
     
-	ItemStack helm = new ItemStack(itemid, 1);
-	target.getInventory().setHelmet(helm);
+
+    ItemStack helm = new ItemStack(itemid, 1);
+    target.getInventory().setHelmet(helm);
+    if (itemid == 0) { target.getInventory().remove(Material.AIR); } 
 	target.sendMessage("Enjoy your new block head!");
 	Player commandSender = (Player)sender;
 	if (target.getName() != commandSender.getName()) {

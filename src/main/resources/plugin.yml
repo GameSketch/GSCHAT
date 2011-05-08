@@ -1,4 +1,4 @@
-name: GSGeneral
+    name: GSGeneral
 main: net.gamesketch.bukkit.bot.GSGeneral
 version: 0.0.1
 website: http://www.gamesketch.net
@@ -74,8 +74,22 @@ commands:
            /<command> message
            Example: /<command> I've been greifed just now. - Report that message to every online mod.
   
+  gsa:
+    description: Response to a /gs support
+    usage: |
+           /<command> player message
+           Example: /<command> nexitem This r response - Responses to a /gs report
   a:
     description: Enables admin chat
     usage: |
            /<command>
            Example: /<command> - Enables admin chat
+           Example: /<command> test - inverses the toggle and sends
+  thunder:
+    description: bla
+    usage: |
+           /<command> [player]
+  prefix:
+    description: bla
+    usage: |
+           /<command> <player> [prefix] [colour]

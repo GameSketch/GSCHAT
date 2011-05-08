@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -41,10 +42,15 @@ public class GSGeneral extends JavaPlugin
   public static boolean enableReport = true;
   public static boolean enableAdminchat = true;
   public static boolean enableanouncer = true;
+  public static boolean enableLightning = true;
   public static long anouncetimer = 900000;
+  public static Server server;
 
   public void onDisable()
   {
+	  Anouncer.timer.cancel();
+	  Prefixer.Save();
+	  System.out.println("Disabled GS General  (Disabled timers)");
   }
 
   public void onEnable()
@@ -68,6 +74,7 @@ public class GSGeneral extends JavaPlugin
 	  
 	  //Regular stuff
       
+    server = getServer();
     adminchat = new LinkedList<Player>();
     PluginManager pm = getServer().getPluginManager();
     PluginDescriptionFile pdfFile = getDescription();
@@ -76,10 +83,12 @@ public class GSGeneral extends JavaPlugin
     pm.registerEvent(Event.Type.PLAYER_QUIT, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_JOIN, this.playerListener, Event.Priority.Normal, this);
     pm.registerEvent(Event.Type.PLAYER_CHAT, this.playerListener, Event.Priority.Highest, this); 
+    pm.registerEvent(Event.Type.PLAYER_INTERACT, this.playerListener, Event.Priority.Normal, this);
     isTimeFrozen = false;
     Settings.Load();
     if (!Rules.checkFile()) { System.out.println("Unable to load rules file."); }
     Anouncer.Load(getServer());
+    Prefixer.init();
 
     System.out.println(pdfFile.getName() + " version " + pdfFile.getVersion() + " is enabled!");
   }
@@ -90,21 +99,16 @@ public class GSGeneral extends JavaPlugin
 
     if (commandName.equals("who")) {
     	if (!GSGeneral.enableWho) { return true; }
-    		
-      Player[] online = sender.getServer().getOnlinePlayers();
-      String list = "";
-      int length = online.length - 1;
-      int on = 0;
-      for (Player current : online)
-        if (current == null) { on++;
-        } else {
-          list = list + (on >= length ? current.getName() : new StringBuilder().append(current.getName()).append(", ").toString());
-          on++;
-        } int serverlist = online.length;
-      String serverliststring = Integer.toString(serverlist);
-
-      sender.sendMessage(ChatColor.GREEN + "Connected players (" + serverliststring + "): " + ChatColor.GRAY + list);
-      return true;
+    	Player[] online = sender.getServer().getOnlinePlayers();
+    	StringBuilder list = new StringBuilder();
+    	int on = 0;
+    	for (Player p : online) {
+    		if (p.isOp()) { list.append(ChatColor.RED + p.getName() + ChatColor.WHITE + ", "); }
+    		else { list.append(ChatColor.GRAY + p.getName() + ChatColor.WHITE + ", "); }
+    		on += 1;
+    	}
+    	sender.sendMessage(ChatColor.GREEN + "Connected players (" + on + "): " + list.substring(0, list.length() - 2));
+    	return true;
     }
     if ((commandName.equals("/spawn")) || (commandName.equals("spawn"))) {
     	if (!GSGeneral.enableSpawn) { return true; }
@@ -183,6 +187,26 @@ public class GSGeneral extends JavaPlugin
       return true;
     }
     
+    if (commandName.equals("prefix")) {
+    	if (!sender.isOp()) { return true; }
+    	Player target;
+    	if (args.length < 3) { return false; }
+      	if (sender.getServer().getPlayer(args[0]) instanceof Player) {
+      		target = sender.getServer().getPlayer(args[0]);
+      	}
+      	else { return false; }
+      	PlayerPrefix prefix = new PlayerPrefix(target.getName());
+    	prefix = Prefixer.getPrefix(target);
+    	
+    	Prefixer.prefixes.remove(prefix);
+    	prefix = new PlayerPrefix(target.getName(), args[1], Prefixer.toInt(args[2]));
+    	
+    	Prefixer.prefixes.add(prefix);
+    	sender.sendMessage("Done.");
+    	Prefixer.Save();
+    	return true;
+    }
+    
     if (commandName.equals("rules")) {
     	if (!GSGeneral.enableRules) { return true; }
     	if (!Rules.send((Player)sender, args)) { return false; }
@@ -208,7 +232,28 @@ public class GSGeneral extends JavaPlugin
     	}
     	return true;
     }
-    
+    if (commandName.equals("gsa")) {
+    	Player player = (Player)sender;
+    	if (!GSGeneral.enableReport){ return true; }
+    	if (!player.isOp()) { return true; }
+    	if (args.length < 2) { player.sendMessage(ChatColor.RED + "Invalid arguments"); return false; }
+    	else {
+    		Player target = player.getServer().getPlayer(args[0]);
+    		if (target instanceof Player) {
+    			StringBuilder msg = new StringBuilder();
+    			int i = 0;
+    			for (String arg : args) {
+    				if (i >= 1) {
+    					msg.append(arg).append(" ");
+    				}
+    				i += 1;
+    			}
+    			target.sendMessage("[" + ChatColor.DARK_GREEN + "SUPPORT: " + player.getName() + ChatColor.WHITE + "] " + ChatColor.GOLD + msg);
+    			player.sendMessage("Support send to " + target.getName());
+    			return true;
+    		}
+    	}
+    }
     if (commandName.equals("a")) {
     	Player player = (Player)sender;
     	if (!GSGeneral.enableAdminchat) { return true; }
@@ -225,22 +270,48 @@ public class GSGeneral extends JavaPlugin
         	return true; 
         }
         else {
-        	Player[] online = player.getServer().getOnlinePlayers();
-        	StringBuilder themessage = new StringBuilder();
-        	for (String s : args) {
-        		themessage.append(s);
-        		themessage.append(" ");
+        	if (!adminchat.contains(player)) {
+        		Player[] online = player.getServer().getOnlinePlayers();
+        		StringBuilder themessage = new StringBuilder();
+        		for (String s : args) {
+        			themessage.append(s);
+        			themessage.append(" ");
+        		}
+        		for (Player p : online) {
+        			if (p.isOp()) {
+        				p.sendMessage("[" + ChatColor.GREEN + "/a" + ChatColor.WHITE + "] " + player.getName() + ": " + themessage);
+        			}
+        		}
+        		return true;
         	}
-        	for (Player p : online) {
-    			if (p.isOp()) {
-    				p.sendMessage("[" + ChatColor.GREEN + "/a" + ChatColor.WHITE + "] " + player.getName() + ": " + themessage);
-    			}
-    		}
-        	return true;
-        	
+        	else {
+        		StringBuilder string = new StringBuilder();
+        		
+        		for (String s : args) {
+        			string.append(s);
+        			string.append(" ");
+        		}
+        		
+        		player.chat(string.toString());
+        	}
         }
     }
-    
+    if (commandName.equals("thunder")) {
+    	if (GSGeneral.enableLightning) { return true; }
+    	if (!sender.isOp()) { return true; }
+    	Player player = (Player)sender;
+    	Player target;
+    	if (args.length < 1) { target = player; }
+    	else { 
+    		if (player.getServer().getPlayer(args[0]) instanceof Player) {
+    			target = player.getServer().getPlayer(args[0]);
+    		} else {
+    			target = player;
+    		}
+    	}
+    	target.getWorld().strikeLightning(target.getLocation());
+    	return true;
+    }
 
     
     if (commandName.equals("setmotd")) {
@@ -288,7 +359,7 @@ public class GSGeneral extends JavaPlugin
         	replaceAll("@darkred@", ChatColor.DARK_RED + "").
         	replaceAll("@pink@", ChatColor.LIGHT_PURPLE + "");
 
-            player.sendMessage(ChatColor.RED + "[MOTD]" + ChatColor.WHITE + " " + str);
+            player.sendMessage("[" + ChatColor.GOLD + "GS" + ChatColor.WHITE + "] " + str);
         }
         return true;
     }
