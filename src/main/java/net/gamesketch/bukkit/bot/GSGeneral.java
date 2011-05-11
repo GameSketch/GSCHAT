@@ -21,7 +21,6 @@ import org.bukkit.event.player.PlayerListener;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 public class GSGeneral extends JavaPlugin
 {
@@ -50,7 +49,7 @@ public class GSGeneral extends JavaPlugin
   {
 	  Anouncer.timer.cancel();
 	  Prefixer.Save();
-	  System.out.println("Disabled GS General  (Disabled timers)");
+	  System.out.println("Disabled GS General");
   }
 
   public void onEnable()
@@ -112,57 +111,25 @@ public class GSGeneral extends JavaPlugin
     }
     if ((commandName.equals("/spawn")) || (commandName.equals("spawn"))) {
     	if (!GSGeneral.enableSpawn) { return true; }
-      Player player = (Player)sender;
-      Location spawn = player.getWorld().getSpawnLocation();
-      spawn.setX(spawn.getX() - 0.5);
-      spawn.setZ(spawn.getZ() - 0.5);
-      player.teleport(spawn);
-      player.sendMessage("Welcome to the spawn!");
-      return true;
+    	Player player = (Player)sender;
+    	Location spawn = player.getWorld().getSpawnLocation();
+    	spawn.setX(spawn.getX() - 0.5);
+    	spawn.setZ(spawn.getZ() - 0.5);
+    	player.teleport(spawn);
+    	player.sendMessage("Welcome to the spawn!");
+    	return true;
     }
     if (commandName.equals("setspawn")) {
     	if (!GSGeneral.enableSetspawn) { return true; }
-      Player player = (Player)sender;
-      Location playerloc = player.getLocation();
-      if (!player.isOp()) {
-        player.sendMessage("You can't set the spawn!");
-        return false;
-      }
-      player.getWorld().setSpawnLocation((int)playerloc.getX(), (int)playerloc.getY(), (int)playerloc.getZ());
-      player.sendMessage("You've set the spawn at your position.");
-      return true;
-    }
-    if ((commandName.equals("/dist")) || (commandName.equals("/angle"))) {
-      Player player = (Player)sender;
-      Location spawnloc = player.getWorld().getSpawnLocation();
-      Location playerloc = player.getLocation();
-
-      Vector spawnvect = new Vector();
-      spawnvect.setX(spawnloc.getX());
-      spawnvect.setY(spawnloc.getY());
-      spawnvect.setZ(spawnloc.getZ());
-
-      Vector playervect = new Vector();
-      playervect.setX(playerloc.getX());
-      playervect.setY(playerloc.getY());
-      playervect.setZ(playerloc.getZ());
-
-      String distance = Integer.toString((int)playervect.distance(spawnvect));
-      String angle = Integer.toString((int)playervect.angle(spawnvect));
-
-      if (commandName.equals("/dist")) {
-    	  if (!GSGeneral.enabledist) {
-    		  player.sendMessage("The distance from you to the spawn is " + distance + " blocks.");
-    	  }
-        return true;
-      }
-      if (commandName.equals("/angle")) {
-    	  if (!GSGeneral.enableangle) {
-    		  player.sendMessage("The angle from you to the spawn is " + angle + " degrees.");
-    	  }
+    	Player player = (Player)sender;
+    	Location playerloc = player.getLocation();
+    	if (!player.isOp()) {
+    		player.sendMessage("You can't set the spawn!");
+    		return false;
+    	}
+    	player.getWorld().setSpawnLocation((int)playerloc.getX(), (int)playerloc.getY(), (int)playerloc.getZ());
+    	player.sendMessage("You've set the spawn at your position.");
     	return true;
-      }
-      return false;
     }
     if (commandName.equals("blockhead")) {
     	if (!GSGeneral.enableblockhead) { return true; }
@@ -258,43 +225,29 @@ public class GSGeneral extends JavaPlugin
     	Player player = (Player)sender;
     	if (!GSGeneral.enableAdminchat) { return true; }
     	if (!player.isOp()) { player.sendMessage(ChatColor.RED + "You are no moderator."); return true; }
-        if (args.length < 1) { 
-        	if (adminchat.contains(player)) {
-        		adminchat.remove(player);
-        		player.sendMessage(ChatColor.GREEN + "You " + ChatColor.RED + "aren't" + ChatColor.GREEN + " talking in the /a chat anymore");
-        	}
-        	else {
-        		adminchat.add(player);
-        		player.sendMessage(ChatColor.GREEN + "You are now talking in the /a chat."); 
-        	}
-        	return true; 
-        }
-        else {
-        	if (!adminchat.contains(player)) {
-        		Player[] online = player.getServer().getOnlinePlayers();
-        		StringBuilder themessage = new StringBuilder();
-        		for (String s : args) {
-        			themessage.append(s);
-        			themessage.append(" ");
-        		}
-        		for (Player p : online) {
-        			if (p.isOp()) {
-        				p.sendMessage("[" + ChatColor.GREEN + "/a" + ChatColor.WHITE + "] " + player.getName() + ": " + themessage);
-        			}
-        		}
-        		return true;
-        	}
-        	else {
-        		StringBuilder string = new StringBuilder();
-        		
-        		for (String s : args) {
-        			string.append(s);
-        			string.append(" ");
-        		}
-        		
-        		player.chat(string.toString());
-        	}
-        }
+    	
+    	if (args.length < 1) {
+    		if (adminchat.contains(player)) { player.sendMessage(ChatColor.GREEN + "You are no longer talking in the Admin Chat"); adminchat.remove(player); }
+    		else { player.sendMessage(ChatColor.GREEN + "You are now talking in the Admin Chat."); adminchat.add(player); }
+    		return true;
+    	}
+    	String message = "";
+    	for (String s : args) {
+    		message = message + s + " ";
+    	}
+    	message = message.substring(0, message.length() - 1);
+    	
+    	if (adminchat.contains(player)) {
+    		for (Player p : getServer().getOnlinePlayers()) {
+    			p.sendMessage(Prefixer.getPrefix(player) + " " + player + ": " + message);
+    		}
+    	} else {
+    		for (Player p : getServer().getOnlinePlayers()) {
+    			if (p.isOp()) {
+    				p.sendMessage("[" + ChatColor.GREEN + "/a" + ChatColor.WHITE + "] " + player + ": " + message);
+    			}
+    		}
+    	}
     }
     if (commandName.equals("thunder")) {
     	if (GSGeneral.enableLightning) { return true; }
