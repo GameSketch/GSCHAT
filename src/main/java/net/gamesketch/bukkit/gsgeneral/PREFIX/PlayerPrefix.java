@@ -1,4 +1,6 @@
-package net.gamesketch.bukkit.bot;
+package net.gamesketch.bukkit.gsgeneral.PREFIX;
+
+import net.gamesketch.bukkit.gsgeneral.Core;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -26,7 +28,7 @@ public class PlayerPrefix {
 	public String getRawPrefix() {
 		return prefix;
 	}
-	public Player getPlayer() { return GSGeneral.server.getPlayer(player); }
+	public Player getPlayer() { return Core.server.getPlayer(player); }
 	public String getPlayerName() { return player; }
 	public String getPrefixText() { return prefix; }
 	public String getColor() { return "" + color; }

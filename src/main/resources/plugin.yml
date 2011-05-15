@@ -1,23 +1,17 @@
-    name: GSGeneral
-main: net.gamesketch.bukkit.bot.GSGeneral
+name: GSGeneral
+main: net.gamesketch.bukkit.gsgeneral.Core
 version: 0.0.1
 website: http://www.gamesketch.net
 author: The GameSketch Community
 description: >
-             Replacements of the old IRC bot "GS-CHAT".
+             General commands of the server
 commands:
   who:
     description: Returns the online players.
     usage: |
            /<command>
            Example: /<command> - Returns the online players.
-  
-  /spawn:
-    description: Teleports you to the world spawn
-    usage: |
-           /<command>
-           Example: /<command> - Returns you to the world spawn.
-           
+
   spawn:
     description: Teleports you to the world spawn
     usage: |
@@ -30,24 +24,12 @@ commands:
            /<command>
            Example: /<command> - Sets the spawn at your location.
   
-  /dist:
-    description: Calculates the distance from your x/y/z to spawn's x/y/z
-    usage: |
-           /<command>
-           Example: /<command> - Returns the distance to the spawn
-  
   blockhead:
     description: Sets the block on your head slot
     usage: |
            /<command> itemID
            Example: /<command> 53 - Places an wooden stair on your head
            Example: /<command> 20 bukkit - Places an glass block on a player named "bukkit" his head.
-  
-  freezetime:
-    description: Let opped players freeze the time
-    usage: |
-           /<command>
-           Example: /<command> - Freezes the time on day
            
   rules:
     description: A page with rules
@@ -55,12 +37,6 @@ commands:
            /<command> pagename
            Example: /<command> - Shows the list with pages
            Example: /<command> building - Shows the rules about building
-           
-  setmotd:
-    description: Set the message of the day.
-    usage: |
-           /<command> message
-           Example: /<command> "Welcome to the GameSketch Network" - set the motd.
            
   motd:
     description: Read the message of the day.
@@ -85,10 +61,6 @@ commands:
            /<command>
            Example: /<command> - Enables admin chat
            Example: /<command> test - inverses the toggle and sends
-  thunder:
-    description: bla
-    usage: |
-           /<command> [player]
   prefix:
     description: bla
     usage: |
