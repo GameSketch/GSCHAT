@@ -11,11 +11,11 @@ public class commandPrefix {
     	if (!sender.isOp()) { return true; }
     	String targetname = "";
     	if (args.length < 3) { return false; }
-      	targetname = args[0];
+      	targetname = args[0].toLowerCase();
       	
     	PlayerPrefix prefix = Prefixer.getPrefixByName(targetname);
-    	
     	Prefixer.prefixes.remove(prefix);
+    	
     	prefix = new PlayerPrefix(targetname, args[1], Prefixer.toInt(args[2]));
     	
     	Prefixer.prefixes.add(prefix);

@@ -33,7 +33,7 @@ public class commandA {
     	} else {
     		for (Player p : player.getServer().getOnlinePlayers()) {
     			if (p.isOp()) {
-    				p.sendMessage("[" + ChatColor.GREEN + "/a" + ChatColor.WHITE + "] " + player.getName() + ": " + message);
+    				p.sendMessage(AdminChat.parseFormat(player.getName(),message));
     			}
     		}
     	}

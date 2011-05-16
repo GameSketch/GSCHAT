@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+import net.gamesketch.bukkit.gsgeneral.Core;
+
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 
@@ -31,10 +33,14 @@ public class Prefixer {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String s;
 			while ((s = in.readLine()) != null) {
-				
+				if (!s.matches("[a-zA-Z0-9_]+:[a-zA-Z0-9]+:[0-9]+")) {
+					System.out.println("[GSGeneral-prefix] Error parsing the string " + s);
+					continue;
+				}
 				String prefix = s.split(":")[1];
 				int color = Integer.parseInt(s.split(":")[2]);
-				String p = s.split(":")[0];
+				String p = s.split(":")[0].toLowerCase();
+				if (getPrefixByName(p) != null) { continue; } //to prevent old dupes
 				prefixes.add(new PlayerPrefix(p,prefix,color));
 				continue;
 			}
@@ -43,6 +49,9 @@ public class Prefixer {
 	public static void init() { 
 		prefixes = new LinkedList<PlayerPrefix>(); 
 		Load();
+		for (Player p : Core.server.getOnlinePlayers()) {
+			if (getPrefix(p) == null) { prefixes.add(new PlayerPrefix(p.getName())); }
+		}
 	}
 	public static void Save() {
 		if (!file.exists()) {
@@ -75,13 +84,13 @@ public class Prefixer {
 	
 	public static PlayerPrefix getPrefix(Player p) {
 		for (PlayerPrefix prefix : prefixes) {
-			if (prefix.getPlayerName().equals(p.getName())) { return prefix; }
+			if (prefix.getPlayerName().equalsIgnoreCase(p.getName())) { return prefix; }
 		}
 		return null;
 	}
 	public static PlayerPrefix getPrefixByName(String name) {
 		for (PlayerPrefix prefix : prefixes) {
-			if (name.equals(prefix.getPlayerName())) { return prefix; }
+			if (name.equalsIgnoreCase(prefix.getPlayerName())) { return prefix; }
 		}
 		return null;
 	}

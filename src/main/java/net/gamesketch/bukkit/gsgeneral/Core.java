@@ -3,10 +3,12 @@ package net.gamesketch.bukkit.gsgeneral;
 import net.gamesketch.bukkit.gsgeneral.ADMINCHAT.AdminChat;
 import net.gamesketch.bukkit.gsgeneral.ANOUNCER.Anouncer;
 import net.gamesketch.bukkit.gsgeneral.Listeners.Listeners;
+import net.gamesketch.bukkit.gsgeneral.MISC.commandA;
 import net.gamesketch.bukkit.gsgeneral.MISC.commandBlockhead;
 import net.gamesketch.bukkit.gsgeneral.MISC.commandGs;
 import net.gamesketch.bukkit.gsgeneral.MISC.commandGsa;
 import net.gamesketch.bukkit.gsgeneral.MISC.commandPrefix;
+import net.gamesketch.bukkit.gsgeneral.MISC.commandReloadgs;
 import net.gamesketch.bukkit.gsgeneral.MISC.commandSetspawn;
 import net.gamesketch.bukkit.gsgeneral.MISC.commandSpawn;
 import net.gamesketch.bukkit.gsgeneral.MISC.commandWho;
@@ -59,6 +61,8 @@ public class Core extends JavaPlugin {
 	    if (commandName.equals("gs")) { return commandGs.performGs(sender, args); }
 	    if (commandName.equals("gsa")) { return commandGsa.performGsa(sender, args); }
 	    if (commandName.equals("motd")) { Motd.sendMotd((Player)sender); return true; }
+	    if (commandName.equals("a")) { return commandA.performA(sender, args); }
+	    if (commandName.equals("reloadgs")) { commandReloadgs.perform(sender, args); return true; } 
 	    return true;
 	}
 	

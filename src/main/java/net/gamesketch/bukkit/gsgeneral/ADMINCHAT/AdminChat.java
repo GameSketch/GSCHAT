@@ -20,7 +20,7 @@ public class AdminChat {
 			event.setCancelled(true);
 			for (Player p : event.getPlayer().getServer().getOnlinePlayers()) {
 				if (p.isOp()) {
-					p.sendMessage("[" + ChatColor.RED + "/a" + ChatColor.WHITE + "] " + event.getPlayer() + ": " + event.getMessage());
+					p.sendMessage(parseFormat(event.getPlayer().getDisplayName(), event.getMessage()));
 				}
 			}
 		}
@@ -29,4 +29,9 @@ public class AdminChat {
 	public static List<Player> getList() {
 		return players;
 	}
+	
+	public static String parseFormat(String name, String message) {
+		return "[" + ChatColor.DARK_RED + "/a" + ChatColor.WHITE + "] " + ChatColor.RED + name + ChatColor.WHITE + ": " + ChatColor.GOLD + message;
+	}
+	
 }

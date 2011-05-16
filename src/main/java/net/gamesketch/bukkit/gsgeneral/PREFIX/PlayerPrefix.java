@@ -32,4 +32,5 @@ public class PlayerPrefix {
 	public String getPlayerName() { return player; }
 	public String getPrefixText() { return prefix; }
 	public String getColor() { return "" + color; }
+	public ChatColor getChatColor() { return ChatColor.getByCode(color); }
 }
