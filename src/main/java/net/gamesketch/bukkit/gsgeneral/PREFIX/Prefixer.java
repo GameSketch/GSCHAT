@@ -33,7 +33,7 @@ public class Prefixer {
 			BufferedReader in = new BufferedReader(new FileReader(file));
 			String s;
 			while ((s = in.readLine()) != null) {
-				if (!s.matches("[a-zA-Z0-9_]+:[a-zA-Z0-9]+:[0-9]+")) {
+				if (!s.matches("[a-zA-Z0-9_]+:[a-zA-Z0-9_/\\]+:[0-9]+")) {
 					System.out.println("[GSGeneral-prefix] Error parsing the string " + s);
 					continue;
 				}
